@@ -15,8 +15,8 @@ class MySearchPage extends StatefulWidget {
 class _MySearchPageState extends State<MySearchPage>
     with SingleTickerProviderStateMixin {
   bool _isConnect = false;
+  bool _isConnect2 = false;
   bool itIs = false;
-  bool itIs2 = false;
 
   _checkInternetConnectivity() async {
     var result = await Connectivity().checkConnectivity();
@@ -83,6 +83,7 @@ class _MySearchPageState extends State<MySearchPage>
 
   @override
   Widget build(BuildContext context) {
+    print("SCAFFOLD");
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -149,19 +150,32 @@ class _MySearchPageState extends State<MySearchPage>
                 Widget child,
               ) {
                 final bool connected = connectivity != ConnectivityResult.none;
-                if (connected != _isConnect) itIs = true;
+                if (connected != _isConnect2) itIs = true;
                 else itIs = false;
-                if(_isConnect && connected) itIs2 = true;
-                else itIs2 = false;
-                _isConnect = connected;
-                return Stack(
+                _isConnect2 = connected;
+                print("ONE TIME");
+                print(itIs);
+                return connectivity == ConnectivityResult.none ?
+                Stack(
                   fit: StackFit.expand,
                   children: [
                     Container(
                       alignment: Alignment.bottomCenter,
                       child: Container(
-                        key: itIs? UniqueKey() : null,
-                        child: ConnectivityBuild(connection: _isConnect, itIs: itIs),
+                        key: UniqueKey(),
+                        child: ConnectivityBuild(connection: false,),
+                      ),
+                    ),
+                  ],
+                ) :
+                Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        key: ValueKey(1),
+                        child: ConnectivityBuild(connection: true,),
                       ),
                     ),
                   ],
