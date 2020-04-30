@@ -430,7 +430,6 @@ class _SearchState extends State<Search> {
                         style: BorderStyle.solid),
                   ),
                   onPressed: () async {
-                    print((DateTime.now().difference(first)).inDays);
                     if ((DateTime.now().difference(first)).inDays > 0) {
                       _error("Invalid Date",
                           "Sadly, you can't go back in time to travel :(");

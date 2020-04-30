@@ -7,13 +7,17 @@ import '../widgets/connectivity.dart';
 
 class MySearchPage extends StatefulWidget {
   static const routeName = '/MyHomePage';
+  
+  //const MySearchPage({Key key}) : super(key: key);
 
   @override
   _MySearchPageState createState() => _MySearchPageState();
 }
 
 class _MySearchPageState extends State<MySearchPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin<MySearchPage> {
+  @override
+  bool get wantKeepAlive => true;
   bool _isConnect = false;
   bool _isConnect2 = false;
   bool itIs = false;
@@ -83,34 +87,8 @@ class _MySearchPageState extends State<MySearchPage>
 
   @override
   Widget build(BuildContext context) {
-    print("SCAFFOLD");
+    super.build(context);
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (_) {},
-        backgroundColor: Color.fromRGBO(40, 40, 40, 0.9),
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Color.fromRGBO(225, 158, 38, 1),
-        currentIndex: 0,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flight),
-            title: Text('Flights'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            title: Text('History'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text('my Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            title: Text('Mail'),
-          ),
-        ],
-      ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -153,8 +131,6 @@ class _MySearchPageState extends State<MySearchPage>
                 if (connected != _isConnect2) itIs = true;
                 else itIs = false;
                 _isConnect2 = connected;
-                print("ONE TIME");
-                print(itIs);
                 return connectivity == ConnectivityResult.none ?
                 Stack(
                   fit: StackFit.expand,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import '../widgets/flight_info.dart';
-
 class FlightBuilder extends StatelessWidget {
   final Map<String, dynamic> mapFlight;
   FlightBuilder({Key key, @required this.mapFlight}) : super(key: key);
@@ -19,7 +17,7 @@ class FlightBuilder extends StatelessWidget {
             children: <Widget>[
               SizedBox(
                 height:
-                    (mediaQuery.size.height - mediaQuery.padding.bottom) * 0.45,
+                    (mediaQuery.size.height - mediaQuery.padding.bottom) * 0.5,
                 child: ListView.builder(
                     itemCount: from.length,
                     scrollDirection: Axis.horizontal,
@@ -45,7 +43,7 @@ class FlightBuilder extends StatelessWidget {
               ),
               SizedBox(
                 height:
-                    (mediaQuery.size.height - mediaQuery.padding.bottom) * 0.45,
+                    (mediaQuery.size.height - mediaQuery.padding.bottom) * 0.5,
                 child: ListView.builder(
                     itemCount: to.length,
                     scrollDirection: Axis.horizontal,
@@ -73,7 +71,7 @@ class FlightBuilder extends StatelessWidget {
             ],
           )
         : SizedBox(
-            height: (mediaQuery.size.height - mediaQuery.padding.bottom) * 0.45,
+            height: (mediaQuery.size.height - mediaQuery.padding.bottom) * 0.5,
             child: ListView.builder(
                 itemCount: from.length,
                 scrollDirection: Axis.horizontal,

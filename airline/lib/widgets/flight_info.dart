@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
 
 import '../models/flightsIATA.dart';
+import '../screens/InputInfo.dart';
 
 class FlightInfo extends StatelessWidget {
   final String origin;
@@ -9,14 +11,20 @@ class FlightInfo extends StatelessWidget {
   final String depDate;
   final String arrDate;
   final String adults;
+  final String children;
+  final String infants;
   final String price;
   final String flightNumb;
   final String time;
   final String gate;
   final String gateClose;
   final int around;
-  final bool round;
+  final bool stops;
   final int numbSeats;
+  final Map<String, dynamic> fulldata;
+  final bool first;
+  final bool round;
+  final bool firstFlight;
 
   FlightInfo(
       {@required this.origin,
@@ -24,26 +32,32 @@ class FlightInfo extends StatelessWidget {
       @required this.depDate,
       @required this.arrDate,
       @required this.adults,
+      @required this.children,
+      @required this.infants,
       @required this.price,
       @required this.flightNumb,
       @required this.time,
       @required this.gate,
       @required this.gateClose,
       @required this.around,
-      this.round,
-      @required this.numbSeats});
+      @required this.stops,
+      @required this.numbSeats,
+      @required this.fulldata,
+      @required this.first,
+      @required this.round,
+      @required this.firstFlight});
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
     Map<String, Map<String, String>> temp = FlightsIATA.temp;
-  
-  
-    List<Map<String,String>> citiesCodes = temp.values.toList();
 
-    Map<String, dynamic> mapCities =
-      Map.fromIterable(citiesCodes, key: (v) => v["iata_code"], value: (v) => ("${v["city"]}, ${v["country"]}"));
+    List<Map<String, String>> citiesCodes = temp.values.toList();
+
+    Map<String, dynamic> mapCities = Map.fromIterable(citiesCodes,
+        key: (v) => v["iata_code"],
+        value: (v) => ("${v["city"]}, ${v["country"]}"));
 
     Widget topInfo(String txt, Color color) {
       return LayoutBuilder(
@@ -115,6 +129,17 @@ class FlightInfo extends StatelessWidget {
       );
     }
 
+    Widget roundNotify(String txt) {
+      return Column(
+        children: <Widget>[
+          Text(
+            txt,
+            style: TextStyle(fontSize: 25, color: Color.fromRGBO(220, 158, 38, 1),),
+          ),
+        ],
+      );
+    }
+
     return Container(
       margin: around == 1
           ? EdgeInsets.only(
@@ -142,6 +167,7 @@ class FlightInfo extends StatelessWidget {
           elevation: 1,
           child: Column(
             children: <Widget>[
+              round ? roundNotify(firstFlight ? "First Flight" : "Second Flight") : SizedBox(height: 0, width: 0,),
               Container(
                 height: constraints.maxHeight * 0.1,
                 child: Row(
@@ -167,7 +193,7 @@ class FlightInfo extends StatelessWidget {
                   left: 5,
                   right: 5,
                 ),
-                height: constraints.maxHeight * 0.35,
+                height: constraints.maxHeight * 0.31,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -208,22 +234,56 @@ class FlightInfo extends StatelessWidget {
                     height: constraints.maxHeight * 0.005,
                     color: Color.fromRGBO(102, 102, 102, 1),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    heightFactor: 0.01,
-                    child: round
-                        ? AnimatedAlign(
-                          alignment: Alignment.centerRight,
-                          curve: Curves.ease,
-                          duration: Duration(seconds: 2),
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: Color.fromRGBO(220, 158, 38, 1),
-                              size: 40,
+                  (first && stops)
+                      ? Animator(
+                          tween: Tween<Alignment>(
+                            begin: Alignment.centerRight,
+                            end: Alignment.center,
+                          ),
+                          repeats: 5,
+                          duration: Duration(seconds: 2, microseconds: 500),
+                          curve: Curves.linear,
+                          builder: (anim) => Align(
+                            alignment: anim.value,
+                            heightFactor: 0.01,
+                            child: Animator(
+                              tween: Tween<double>(
+                                begin: 1,
+                                end: 0,
+                              ),
+                              repeats: 5,
+                              duration: Duration(seconds: 2, microseconds: 500),
+                              curve: Curves.linear,
+                              builder: (anim2) => Opacity(
+                                opacity: anim2.value,
+                                child: Container(
+                                  width: mediaQuery.size.width * 0.23,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "Swipe",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color:
+                                              Color.fromRGBO(220, 158, 38, 1),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_back_ios,
+                                        color: Color.fromRGBO(220, 158, 38, 1),
+                                        size: 40,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
-                          )
-                        : Text(""),
-                  ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 0,
+                          width: 0,
+                        ),
                 ],
               ),
               Column(
@@ -237,7 +297,7 @@ class FlightInfo extends StatelessWidget {
                       right: 10,
                       bottom: 7,
                     ),
-                    height: constraints.maxHeight * 0.25,
+                    height: constraints.maxHeight * 0.21,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
@@ -249,7 +309,7 @@ class FlightInfo extends StatelessWidget {
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 15, bottom: 10),
-                    height: constraints.maxHeight * 0.23,
+                    height: constraints.maxHeight * 0.21,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
@@ -264,7 +324,17 @@ class FlightInfo extends StatelessWidget {
                               style:
                                   TextStyle(fontSize: 15, color: Colors.black),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              var route = MaterialPageRoute(
+                                  builder: (BuildContext context) => InputInfo(
+                                        data: {
+                                          "adults": adults,
+                                          "childrens": children,
+                                          "infants": infants
+                                        },
+                                      ));
+                              Navigator.of(context).push(route);
+                            },
                           ),
                         ),
                       ],

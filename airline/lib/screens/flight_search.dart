@@ -23,7 +23,6 @@ class Searching extends SearchDelegate<String> {
         temp.removeAt(0);
       }
       temp.add(name);
-      //temp = [];
       prefs.setStringList("$num", temp);
     }
   }
@@ -73,6 +72,7 @@ class Searching extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     read();
+    print(recentCities.length);
     final suggestionList = query.isEmpty
         ? recentCities
         : cities.where((p) => p.contains(query.toLowerCase())).toList();

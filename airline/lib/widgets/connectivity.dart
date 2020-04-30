@@ -21,9 +21,6 @@ class _ConnectivityBuildState extends State<ConnectivityBuild>
   void initState() {
     super.initState();
     _visible = widget.connection;
-    print("INITIALIZING");
-    print("connection: ");
-    print(widget.connection);
     animationController =
         AnimationController(duration: Duration(seconds: 5), vsync: this);
 
@@ -43,8 +40,6 @@ class _ConnectivityBuildState extends State<ConnectivityBuild>
 
   @override
   Widget build(BuildContext context) {
-    print("_visible; ");
-    print(_visible);
     animationController.forward();
     return AnimatedBuilder(
         animation: animationController,

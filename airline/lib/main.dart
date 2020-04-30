@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './screens/tabs_screen.dart';
-import './screens/home_page.dart';
+import './screens/first_screen.dart';
 import './screens/logo.dart';
+import './screens/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,23 +40,11 @@ class _MyAppState extends State<MyApp> {
         accentColor: Colors.orangeAccent,
         canvasColor: Color.fromRGBO(255, 254, 229, 1),
         fontFamily: 'Raleway',
-        textTheme: ThemeData.light().textTheme.copyWith(
-              body1: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              body2: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              title: TextStyle(
-                fontSize: 24,
-                fontFamily: 'RobotoCondensed',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
       ),
       routes: {
         '/': (ctx) => AnimationLogo(),
-        MySearchPage.routeName: (ctx) => MySearchPage(),
+        '/login': (ctx) => Login(),
+        FirstScreen.routeName: (ctx) => FirstScreen(),
         //FlightSearch.routeName: (ctx) => FlightSearch(),
       },
       /*
@@ -66,7 +54,7 @@ class _MyAppState extends State<MyApp> {
       */
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
-          builder: (ctx) => MySearchPage(),
+          builder: (ctx) => FirstScreen(),
         );
       },
     );
