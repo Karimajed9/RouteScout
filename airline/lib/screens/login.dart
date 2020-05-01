@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './register.dart';
+
 class Login extends StatefulWidget {
   //const Login({Key key}) : super(key: key);
   @override
@@ -280,7 +282,12 @@ class _LoginState extends State<Login> {
                                 color: Colors.blue,
                               ),
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              var route = MaterialPageRoute(
+                                builder: (BuildContext context) => Register(),
+                              );
+                              Navigator.of(context).push(route);
+                            },
                           ),
                         ],
                       ),
