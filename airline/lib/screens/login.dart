@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './register.dart';
 
@@ -13,6 +14,9 @@ class _LoginState extends State<Login> {
   TextEditingController emailController;
   TextEditingController passwordController;
   final _formKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  String email, password;
+  bool wrongEm = false;
 
   @override
   void initState() {
@@ -35,10 +39,15 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             Text("You are logged in!"),
             FlatButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   _logged = false;
                 });
+                try {
+                  _auth.signOut();
+                } catch(e) {
+                  print(e);
+                }
               },
               child: Text(
                 "Logout",
@@ -152,7 +161,7 @@ class _LoginState extends State<Login> {
                                   Pattern pattern =
                                       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                                   RegExp regex = new RegExp(pattern);
-                                  if (!regex.hasMatch(value))
+                                  if (!regex.hasMatch(value.trim()))
                                     return 'Please Enter a Valid Email';
                                   else
                                     return null;
@@ -226,7 +235,7 @@ class _LoginState extends State<Login> {
                                               width: 1,
                                               style: BorderStyle.solid),
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           if (_formKey.currentState
                                               .validate()) {
                                             /*
@@ -235,12 +244,57 @@ class _LoginState extends State<Login> {
                                     */
                                             if (emailController.text != "" &&
                                                 passwordController.text != "") {
-                                              setState(() {
-                                                _logged = true;
-                                              });
+                                              try {
+                                                print(emailController.text);
+                                                print(passwordController.text);
+                                                final newUser = await _auth
+                                                    .signInWithEmailAndPassword(
+                                                        email: emailController
+                                                            .text.trim(),
+                                                        password:
+                                                            passwordController
+                                                                .text);
+
+                                                if (newUser != null) {
+                                                  print("Logged in!");
+                                                  setState(() {
+                                                    wrongEm = false;
+                                                    _logged = true;
+                                                  });
+                                                }
+                                              } catch (e) {
+                                                setState(() {
+                                                  wrongEm = true;
+                                                  passwordController.text = "";
+                                                });
+                                                print(e);
+                                              }
                                             }
                                           }
                                         },
+                                      ),
+                                    ),
+                                    Visibility(
+                                      maintainSize: false,
+                                      maintainAnimation: true,
+                                      maintainState: true,
+                                      visible: wrongEm,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              "Email address or password are incorrect",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 15,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     Padding(

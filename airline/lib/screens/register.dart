@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './login.dart';
 
@@ -14,6 +15,8 @@ class _RegisterState extends State<Register> {
   TextEditingController passwordController;
   TextEditingController confirmpasswordController;
   final _formKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  bool wrongEm = false;
 
   @override
   void initState() {
@@ -153,9 +156,9 @@ class _RegisterState extends State<Register> {
                                 ),
                                 validator: (value) {
                                   Pattern pattern =
-                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                                   RegExp regex = new RegExp(pattern);
-                                  if (!regex.hasMatch(value))
+                                  if (!regex.hasMatch(value.trim()))
                                     return 'Please Enter a Valid Email';
                                   else
                                     return null;
@@ -272,7 +275,7 @@ class _RegisterState extends State<Register> {
                                               width: 1,
                                               style: BorderStyle.solid),
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           if (_formKey.currentState
                                               .validate()) {
                                             /*
@@ -281,12 +284,52 @@ class _RegisterState extends State<Register> {
                                     */
                                             if (emailController.text != "" &&
                                                 passwordController.text != "") {
-                                              setState(() {
-                                                Navigator.of(context).pop();
-                                              });
+                                              try {
+                                                final newuser = await _auth
+                                                    .createUserWithEmailAndPassword(
+                                                        email: emailController
+                                                            .text
+                                                            .trim(),
+                                                        password:
+                                                            passwordController
+                                                                .text);
+                                                if (newuser != null) {
+                                                  Navigator.of(context).pop();
+                                                }
+                                              } catch (e) {
+                                                setState(() {
+                                                  wrongEm = true;
+                                                  passwordController.text = "";
+                                                  confirmpasswordController.text = "";
+                                                });
+                                                print(e);
+                                              }
                                             }
                                           }
                                         },
+                                      ),
+                                    ),
+                                    Visibility(
+                                      maintainSize: false,
+                                      maintainAnimation: true,
+                                      maintainState: true,
+                                      visible: wrongEm,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              "Email address already exists",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 15,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],

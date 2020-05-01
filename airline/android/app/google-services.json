@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "127276549123",
+    "firebase_url": "https://routescout-994f4.firebaseio.com",
+    "project_id": "routescout-994f4",
+    "storage_bucket": "routescout-994f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127276549123:android:f09b7a8ee298f633b7ba36",
+        "android_client_info": {
+          "package_name": "com.example.airline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127276549123-5uinr57h76krej1a0bted0ogi77g9kmv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCqph4-b22fpMC5-cBOD-nyeWLUjiJEW8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127276549123-5uinr57h76krej1a0bted0ogi77g9kmv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
