@@ -204,6 +204,18 @@ class _InputInfoState extends State<InputInfo> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Color.fromRGBO(220, 158, 38, 1),
+        ),
+        title: Text(
+          'Input Information',
+          style: TextStyle(
+            color: Color.fromRGBO(220, 158, 38, 1),
+          ),
+        ),
+        backgroundColor: Color.fromRGBO(40, 40, 40, 0.9),
+      ),
       backgroundColor: Colors.grey[850],
       body: SingleChildScrollView(
         child: GestureDetector(

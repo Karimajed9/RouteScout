@@ -245,8 +245,6 @@ class _LoginState extends State<Login> {
                                             if (emailController.text != "" &&
                                                 passwordController.text != "") {
                                               try {
-                                                print(emailController.text);
-                                                print(passwordController.text);
                                                 final newUser = await _auth
                                                     .signInWithEmailAndPassword(
                                                         email: emailController
